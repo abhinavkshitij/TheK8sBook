@@ -15,3 +15,10 @@ spec:
       image: nigelpoulton/web-app:1.0
       ports:
         - containerPort: 8080
+      resources:
+        requests:
+          memory: 64Mi
+          cpu: "0.25"
+        limits:
+          memory: 256Mi
+          cpu: "0.5"

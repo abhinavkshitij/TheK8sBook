@@ -8,31 +8,14 @@ metadata:
   labels:
     app: sidecar
 spec:
-  containers:
-  - name: ctr-web
-    image: nginx
-    volumeMounts:
-    - name: html
-      mountPath: /usr/share/nginx/
-    resources:
-      requests:
-        cpu: "100m"
-        memory: "128Mi"
-      limits:
-        cpu: "250m"
-        memory: "256Mi"
+  initContainers:
   - name: ctr-sync
+  # Converts the init container to a sidecar container
+    restartPolicy: Always
     image: k8s.gcr.io/git-sync:v3.1.6
     volumeMounts:
     - name: html
       mountPath: /tmp/git
-    resources:
-      requests:
-        cpu: "50m"
-        memory: "64Mi"
-      limits:
-        cpu: "100m"
-        memory: "128Mi"
     env:
     - name: GIT_SYNC_REPO
       value: https://github.com/abhinavkshitij/ps-sidecar.git
@@ -42,6 +25,25 @@ spec:
       value: "1"
     - name: GIT_SYNC_DEST
       value: "html"
+    requests:
+      memory: 64Mi
+      cpu: "0.25"
+    limits:
+      memory: 256Mi
+      cpu: "0.5"
+  containers:
+  - name: ctr-web
+    image: nginx
+    volumeMounts:
+    - name: html
+      mountPath: /usr/share/nginx/
+    resources:    
+      requests:
+        memory: 64Mi
+        cpu: "0.25"
+      limits:
+        memory: 256Mi
+        cpu: "0.5"
   volumes:
   - name: html
     emptyDir: {}
