@@ -7,6 +7,7 @@ spec:
   ports:
   - port: 8080
     targetPort: 8080
+    protocol: TCP
   selector:
     env: shield
 ---
@@ -19,6 +20,7 @@ spec:
   ports:
   - port: 8080
     targetPort: 8080
+    protocol: TCP
   selector:
     env: hydra
 ---
@@ -35,6 +37,13 @@ spec:
     ports:
     - containerPort: 8080
     imagePullPolicy: Always
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
 ---
 apiVersion: v1
 kind: Pod
@@ -49,3 +58,10 @@ spec:
     ports:
     - containerPort: 8080
     imagePullPolicy: Always
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
